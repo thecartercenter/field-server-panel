@@ -1,0 +1,50 @@
+<p>This tool backs up data from the field drive to the field server's SD card.</p>
+
+<% if @status.nil? || !@status["running"] %>
+  <a href="/backup/run" onclick="fetch('/backup/run', {method: 'POST'}).then(res => window.history.go(0)); return false;">Backup Now</a> - Backup files and remove older backups per the retention policy below<br/>
+<% end %>
+<a href="/backup">Refresh</a> - Update the information below
+
+<h3>Status</h3>
+
+<% if @status.nil? %>
+  No backups have been run yet.
+<% elsif @status["status"] == "running" %>
+  Backup currently running. Started at <%= @status["time"] %>. See log below. <a href="/backup">Refresh</a> for updates.
+<% else %>
+  Last backup <%= @status["status"] %> at <%= @status["time"] %>. See log below.
+<% end %>
+
+<h3>Settings</h3>
+<ul>
+  <li><strong>Storage Location:</strong> <%= @config["dest_path"] %> (<%= @space_left_gib %> GiB free)</li>
+  <li><strong>Database:</strong> <%= @config["database"] || "[None]" %></li>
+  <li>
+    <strong>Sources:</strong>
+    <ul>
+      <% @config["source_paths"].each do |source| %>
+        <li><%= source %></li>
+      <% end %>
+    </ul>
+  </li>
+  <li>
+    <strong>Retention:</strong> Keep <%= @config["retention"]["daily"] %> daily backups
+    and <%= @config["retention"]["weekly"] %> weekly backups, space permitting
+  </li>
+</ul>
+
+<h3>All Backups</h3>
+<% if @backups.any? %>
+  <ul>
+    <% @backups.each do |backup| %>
+      <li><%= backup %> UTC</li>
+    <% end %>
+  </ul>
+<% else %>
+  No backups present.
+<% end %>
+
+<% if @log %>
+  <h3>Log</h3>
+  <pre><%= @log %></pre>
+<% end %>
