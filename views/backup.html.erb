@@ -1,9 +1,35 @@
 <p>This tool backs up data from the field drive to the field server's SD card.</p>
 
-<% if @status.nil? || !@status["running"] %>
-  <a href="/backup/run" onclick="fetch('/backup/run', {method: 'POST'}).then(res => window.history.go(0)); return false;">Backup Now</a> - Backup files and remove older backups per the retention policy below<br/>
-<% end %>
-<a href="/backup">Refresh</a> - Update the information below
+<table>
+  <% if @status.nil? || @status["status"] != "running" %>
+    <tr>
+      <td>
+        <a href="/backup/run" onclick="fetch('/backup/run', {method: 'POST'}).then(res => window.history.go(0)); return false;">Backup Now</a>
+      </td>
+      <td>
+        Backup files and remove older backups per the retention policy below.<br/>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td>
+      <a href="/backup">Refresh</a>
+    </td>
+    <td>
+      Update the information below.
+    </td>
+  </tr>
+  <% if @status&.[]("status") == "running" %>
+    <tr>
+      <td>
+        <a href="/backup/reset" onclick="fetch('/backup/reset', {method: 'POST'}).then(res => window.history.go(0)); return false;">Reset</a>
+      </td>
+      <td>
+        If the status has been "running" for a long time and the process seems frozen, you can try resetting it.
+      </td>
+    </tr>
+  <% end %>
+</table>
 
 <h3>Status</h3>
 

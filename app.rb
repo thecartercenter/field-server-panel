@@ -53,6 +53,10 @@ post "/backup/run" do
   end
 end
 
+post "/backup/reset" do
+  Backup.new(load_config("backup")).reset
+end
+
 def load_config(key)
   config = YAML.safe_load(File.read(File.join(settings.root, "config.yml")))
   raise "#{key} config missing" unless config.is_a?(Hash) && config.key?(key)

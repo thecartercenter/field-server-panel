@@ -51,8 +51,16 @@ class Backup
       ">> #{log_path} 2>> #{log_path}")
     write_status(:failed) && return unless res
     log("Pruning complete.") if res
-
+  rescue StandardError => e
+    log(e)
+    write_status(:failed)
+    raise e # Re-raise error so full backtrace gets logged to server log.
+  else
     write_status(:succeeded)
+  end
+
+  def reset
+    write_status(:failed)
   end
 
   private
