@@ -1,7 +1,7 @@
 <p>This tool backs up data from the field drive to the field server's SD card.</p>
 
 <table>
-  <% if !@dest_missing && (@status.nil? || @status["status"] != "running") %>
+  <% if @backup.enabled? && !@backup.running? %>
     <tr>
       <td>
         <a href="/backup/run" onclick="fetch('/backup/run', {method: 'POST'}).then(res => window.history.go(0)); return false;">Backup Now</a>
@@ -19,7 +19,7 @@
       Update the information below.
     </td>
   </tr>
-  <% if !@dest_missing && @status&.[]("status") == "running" %>
+  <% if @backup.running? %>
     <tr>
       <td>
         <a href="/backup/reset" onclick="fetch('/backup/reset', {method: 'POST'}).then(res => window.history.go(0)); return false;">Reset</a>
@@ -33,19 +33,19 @@
 
 <h3>Status</h3>
 
-<% if @dest_missing %>
+<% if !@backup.enabled? %>
   Can't find storage location at <%= @config["dest_path"] %>. Backup disabled.
-<% elsif @status.nil? %>
+<% elsif @backup.fresh? %>
   No backups have been run yet.
-<% elsif @status["status"] == "running" %>
-  Backup currently running. Started at <%= @status["time"] %>. See log below. <a href="/backup">Refresh</a> for updates.
+<% elsif @backup.running? %>
+  Backup currently running. Started at <%= @backup.status["time"] %>. See log below. <a href="/backup">Refresh</a> for updates.
 <% else %>
-  Last backup <%= @status["status"] %> at <%= @status["time"] %>. See log below.
+  Last backup <%= @backup.status["status"] %> at <%= @backup.status["time"] %>. See log below.
 <% end %>
 
 <h3>Settings</h3>
 <ul>
-  <li><strong>Storage Location:</strong> <%= @config["dest_path"] %> (<%= @space_left_gib %> GiB free)</li>
+  <li><strong>Storage Location:</strong> <%= @config["dest_path"] %> (<%= @backup.free_space_gib %> GiB free)</li>
   <li><strong>Database:</strong> <%= @config["database"] || "[None]" %></li>
   <li>
     <strong>Sources:</strong>
@@ -61,12 +61,12 @@
   </li>
 </ul>
 
-<% unless @dest_missing %>
+<% if @backup.enabled? %>
   <h3>All Backups</h3>
-  <% if @backups.any? %>
+  <% if @backup.list.any? %>
     <ul>
-      <% @backups.each do |backup| %>
-        <li><%= backup %> UTC</li>
+      <% @backup.list.each do |str| %>
+        <li><%= str %> UTC</li>
       <% end %>
     </ul>
   <% else %>
@@ -74,7 +74,7 @@
   <% end %>
 <% end %>
 
-<% if @log %>
+<% if @backup.log %>
   <h3>Log</h3>
-  <pre><%= @log %></pre>
+  <pre><%= @backup.log %></pre>
 <% end %>

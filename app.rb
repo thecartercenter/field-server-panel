@@ -30,23 +30,7 @@ end
 get "/backup" do
   @config = load_config("backup")
   @title = "Backup"
-  begin
-    stat = Sys::Filesystem.stat(@config["dest_path"])
-    @space_left_gib = (stat.blocks_available.to_f * stat.block_size / 2**30).round(1)
-    @backups = `borg list #{@config["dest_path"]} --format "{archive}, {time}{NL}"`.split("\n")
-  rescue Sys::Filesystem::Error => e
-    @dest_missing = true
-  end
-  @status = begin
-              YAML.safe_load(File.read(File.join(@config["tmp_dir"], "backup", "status.yml")))
-            rescue Errno::ENOENT
-              nil
-            end
-  @log = begin
-           File.read(File.join(@config["tmp_dir"], "backup", "log"))
-         rescue Errno::ENOENT
-           nil
-         end
+  @backup = Backup.new(load_config("backup"))
   erb(:backup)
 end
 
