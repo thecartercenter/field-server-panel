@@ -69,6 +69,7 @@ class Backup
   end
 
   def list
+    return nil if running?
     return @list if defined?(@list)
     @list = `borg list #{config["dest_path"]} --format "{archive}, {time} UTC{NL}"`.split("\n")
     @list = @list.map do |b|

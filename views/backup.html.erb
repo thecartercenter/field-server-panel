@@ -61,7 +61,7 @@
   </li>
 </ul>
 
-<% if @backup.enabled? %>
+<% if @backup.enabled? && !@backup.running? %>
   <h3>All Backups</h3>
   <% if @backup.list.any? %>
     <ul>
