@@ -69,7 +69,14 @@ class Backup
   end
 
   def list
-    @list ||= `borg list #{config["dest_path"]} --format "{archive}, {time}{NL}"`.split("\n")
+    return @list if defined?(@list)
+    @list = `borg list #{config["dest_path"]} --format "{archive}, {time} UTC{NL}"`.split("\n")
+    @list = @list.map do |b|
+      b.split(", ").tap do |x|
+        x[0] = x[0].match(/\A(\w+)-\d+\z/)[1] # Remove numeric suffix
+        x[1] = nil # Remove weekday
+      end.compact.join(", ")
+    end
   end
 
   def status
