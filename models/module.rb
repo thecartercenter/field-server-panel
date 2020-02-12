@@ -41,6 +41,10 @@ class Module
     status["status"] == "starting"
   end
 
+  def closed?
+    status["status"] == "closed"
+  end
+
   def enabled?
     enabled
   end

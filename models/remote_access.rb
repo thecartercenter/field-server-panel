@@ -27,12 +27,14 @@ class RemoteAccess < Module
     FileUtils.touch(kill_file_path)
     sleep(1)
     write_log("Remote access closed.")
+    write_status(:closed)
   rescue Errno::EPERM
     write_log("Error closing remote access: No permission to query #{signal['pid']}.")
   rescue Errno::ESRCH
     write_log("Error closing remote access: PID #{signal['pid']} is not running.")
   end
 
+  # Can be starting, failed, running, or closed
   def status
     return @status if @status
     @status = super
