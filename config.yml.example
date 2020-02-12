@@ -1,0 +1,22 @@
+backup:
+  # Where the backups will be stored.
+  dest_path: /mount/my_backup_partition
+
+  # The PostgreSQL database name that will be included in the backup.
+  database: my_db
+
+  # A file containing a label that will be used to identify backups.
+  id_file: /mount/my_data_partition/volname
+
+  # Paths to copy files from. The first path listed must be a directory, and is where the db dump will be stored.
+  source_paths:
+    - /mount/my_data_partition
+
+  # How many backups to keep around.
+  retention:
+    daily: 7
+    weekly: 4
+
+remote:
+  # Which port to expose an TCP tunnel over for SSH access. Should match the port of your SSH daemon.
+  ssh_port: 22
