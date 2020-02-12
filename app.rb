@@ -7,6 +7,11 @@ require_relative "models/remote_access"
 
 Tilt.register(Tilt::ERBTemplate, "html.erb")
 
+use Rack::Auth::Basic, "Protected Area" do |username, password|
+  config = load_config("auth")
+  username == config["username"] && password == config["password"]
+end
+
 # Main app and routes.
 configure :production do
   set :clean_trace, true

@@ -1,4 +1,4 @@
-# Field Server Admin
+# Field Server Panel
 
 ## Dependencies
 
@@ -12,7 +12,7 @@ Make a source directory either in the project directory at `/source` (recommende
 
 Grant passwordless sudo access for the ngrok wrapper script, e.g.
 
-    deploy ALL=(ALL) NOPASSWD: /path/to/field-server-admin/scripts/runngrok
+    deploy ALL=(ALL) NOPASSWD: /path/to/field-server-panel/scripts/runngrok
 
 Setup config with:
 

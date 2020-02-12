@@ -1,3 +1,8 @@
+auth:
+  # Username and password for authentication. Set to a secure password.
+  username: panel
+  password: xxxxxxxx
+
 backup:
   # Where the backups will be stored.
   dest_path: /mount/my_backup_partition
