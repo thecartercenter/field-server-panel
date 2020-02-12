@@ -13,9 +13,9 @@ class RemoteAccess < Module
   def start
     write_log("Starting", append: false)
     write_status(:starting)
-    pid = spawn("ngrok", "tcp", (config["ssh_port"] || 22).to_s, "-log=stdout",
-      %i[out err] => [log_path, "a"])
-    write_status(:starting, "pid" => pid)
+    File.delete(kill_file_path) if File.exist?(kill_file_path)
+    script_path = File.join(config["app_root"], "scripts", "runngrok")
+    spawn("sudo", script_path, (config["ssh_port"] || 22).to_s, log_path)
   rescue StandardError => e
     write_log(e)
     write_status(:failed)
@@ -23,12 +23,10 @@ class RemoteAccess < Module
   end
 
   def close
-    if status["pid"]
-      Process.kill("HUP", status["pid"])
-      write_log("Remote access closed.")
-    else
-      write_log("Error closing remote access: PID is not stored.")
-    end
+    write_log("Closing remote access...")
+    FileUtils.touch(kill_file_path)
+    sleep(1)
+    write_log("Remote access closed.")
   rescue Errno::EPERM
     write_log("Error closing remote access: No permission to query #{signal['pid']}.")
   rescue Errno::ESRCH
@@ -58,5 +56,9 @@ class RemoteAccess < Module
 
   def module_name
     "remote"
+  end
+
+  def kill_file_path
+    @kill_file_path ||= File.join(dir, "kill")
   end
 end

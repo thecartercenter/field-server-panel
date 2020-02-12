@@ -1,0 +1,10 @@
+#!/bin/bash
+ngrok tcp $1 -log=stdout >> $2 2>> $2 &
+child=$!
+
+while [ ! -f tmp/remote/kill ]
+do
+  sleep 0.5
+done
+
+kill $child

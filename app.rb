@@ -70,6 +70,7 @@ end
 def load_config(key)
   config = YAML.safe_load(File.read(File.join(settings.root, "config.yml")))
   raise "#{key} config missing" unless config.is_a?(Hash) && config.key?(key)
+  config[key]["app_root"] = settings.root
   config[key]["tmp_dir"] = File.join(settings.root, "tmp")
   config[key]
 end
