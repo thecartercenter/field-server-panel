@@ -12,7 +12,18 @@
   </head>
 
   <body>
-    <h1>Field Server Admin</h1>
-    <%= yield %>
+    <section id="banner"><h1>Field Server Admin</h1></section>
+    <div id="main">
+      <nav>
+        <ul>
+          <li><a href="backup">Backup</a></li>
+          <li><a href="remote">Remote Access</a></li>
+        </ul>
+      </nav>
+      <section id="content">
+        <h1 id="title"><%= @title %></h1>
+        <%= yield %>
+      </section>
+    </div>
   </body>
 </html>

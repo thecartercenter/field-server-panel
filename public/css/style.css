@@ -1,0 +1,86 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  font-size: 11pt;
+  display: flex;
+  flex-direction: column;
+}
+
+#banner {
+  padding: 1em 0.5em;
+  background-color: #888;
+  color: white;
+}
+
+#banner h1 {
+  margin: 0;
+}
+
+#main {
+  display: flex;
+  flex: 1;
+}
+
+nav {
+  padding: 1em;
+  min-width: 8em;
+  line-height: 150%;
+  border-right: 1px solid #ccc;
+}
+
+nav a {
+  color: blue;
+}
+
+nav ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 0;
+}
+
+#content {
+  flex: 1;
+  padding: 1em;
+}
+
+#title {
+  font-size: 16pt;
+  margin-top: 0;
+}
+
+#status {
+  background-color: #f0f0ff;
+  font-weight: bold;
+  padding: 0.5em;
+  margin-bottom: 1em;
+}
+
+#status .label {
+  font-size: 0.7rem;
+  font-weight: normal;
+  margin-bottom: 0.25em;
+  color: #bbb;
+}
+
+#status a {
+  color: black;
+}
+
+pre {
+  font-size: 0.9em;
+  max-width: 50em;
+  overflow: auto;
+  background-color: #e8e8e8;
+}
+
+#actions td:first-child {
+  padding-right: 0.5em;
+}
+
+#actions a {
+  color: blue;
+}

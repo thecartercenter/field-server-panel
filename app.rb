@@ -26,6 +26,7 @@ before do
 end
 
 get "/" do
+  @title = "Welcome"
   erb(:main)
 end
 

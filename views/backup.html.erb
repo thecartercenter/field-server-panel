@@ -1,6 +1,19 @@
 <p>This tool backs up data from the field drive to the field server's SD card.</p>
 
-<table>
+<div id="status">
+  <div class="label">Status</div>
+  <% if !@backup.enabled? %>
+    Can't find storage location at <%= @config["dest_path"] %>. Backup disabled.
+  <% elsif @backup.fresh? %>
+    No backups have been run yet.
+  <% elsif @backup.running? %>
+    Backup currently running. Started at <%= @backup.status["time"] %>. See log below. <a href="/backup">Refresh</a> for updates.
+  <% else %>
+    Last backup <%= @backup.status["status"] %> at <%= @backup.status["time"] %>. See log below.
+  <% end %>
+</div>
+
+<table id="actions">
   <% if @backup.enabled? && !@backup.running? %>
     <tr>
       <td>
@@ -30,18 +43,6 @@
     </tr>
   <% end %>
 </table>
-
-<h3>Status</h3>
-
-<% if !@backup.enabled? %>
-  Can't find storage location at <%= @config["dest_path"] %>. Backup disabled.
-<% elsif @backup.fresh? %>
-  No backups have been run yet.
-<% elsif @backup.running? %>
-  Backup currently running. Started at <%= @backup.status["time"] %>. See log below. <a href="/backup">Refresh</a> for updates.
-<% else %>
-  Last backup <%= @backup.status["status"] %> at <%= @backup.status["time"] %>. See log below.
-<% end %>
 
 <h3>Settings</h3>
 <ul>
