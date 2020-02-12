@@ -6,8 +6,26 @@
 
 ## Development
 
-1. Get a USB stick and format and mount it. Need not be big. This is your backup partition.
-1. Make a source directory either in the project or elsewhere on your drive. Put some random files in it.
-1. `cp config.yml.example config.yml`. Enter source and destination paths.
-1. `ruby app.rb`
-1. Visit http://localhost:4567/
+Get a USB stick and format and mount it. Need not be big. This is your backup partition.
+
+Make a source directory either in the project directory at `/source` (recommended for development, that folder is gitignored) or elsewhere. Put some random files in it.
+
+Grant passwordless sudo access for the ngrok wrapper script, e.g.
+
+    deploy ALL=(ALL) NOPASSWD: /path/to/field-server-admin/scripts/runngrok
+
+Setup config with:
+
+    cp config.yml.example config.yml
+
+and edit to replace placeholders.
+
+Run
+
+    ruby app.rb
+
+and visit http://localhost:4567/
+
+## Production
+
+Similar to above, but setup Passenger or other app server to serve Rack app.
