@@ -1,7 +1,7 @@
 <p>This tool allows remote access for a system administrator via your internet connection.</p>
 
 <table>
-  <% if @remote.enabled? && !@remote.open? %>
+  <% if @remote.enabled? && !@remote.running? %>
     <tr>
       <td>
         <a href="/remote/start" onclick="fetch('/remote/start', {method: 'POST'}).then(res => window.history.go(0)); return false;">Open</a>
@@ -11,7 +11,7 @@
       </td>
     </tr>
   <% end %>
-  <% if @remote.open? %>
+  <% if @remote.running? %>
     <tr>
       <td>
         <a href="/remote/close" onclick="fetch('/remote/close', {method: 'POST'}).then(res => window.history.go(0)); return false;">Close</a>
@@ -39,7 +39,7 @@
   Remote access is starting up. <a href="/remote">Refresh</a> for updates.
 <% elsif @remote.failed? %>
   Starting remote access failed. See log below.
-<% elsif @remote.open? %>
+<% elsif @remote.running? %>
   Remote access is open at <strong><%= @remote.url %></strong>. It has been open since <%= @remote.status["time"] %>.
 <% else %>
   Remote access is currently closed.

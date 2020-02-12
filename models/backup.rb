@@ -1,5 +1,5 @@
 # Performs a backup.
-class Backup
+class Backup < Module
   attr_accessor :config, :free_space_gib, :enabled
 
   def initialize(config)
@@ -80,58 +80,9 @@ class Backup
     end
   end
 
-  def status
-    @status ||= YAML.safe_load(File.read(File.join(config["tmp_dir"], "backup", "status.yml")))
-  rescue Errno::ENOENT
-    @status = {}
-  end
+  protected
 
-  def log
-    @log ||= File.read(File.join(config["tmp_dir"], "backup", "log"))
-  rescue Errno::ENOENT
-    nil
-  end
-
-  def fresh?
-    status["status"].nil?
-  end
-
-  def running?
-    enabled? && status["status"] == "running"
-  end
-
-  def succeeded?
-    status["status"] == "succeeded"
-  end
-
-  def failed?
-    status["status"] == "failed"
-  end
-
-  def enabled?
-    enabled
-  end
-
-  private
-
-  def log_path
-    @log_path ||= File.join(config["tmp_dir"], "backup", "log")
-  end
-
-  def write_log(message, append: true)
-    File.open(log_path, append ? "a" : "w") { |f| f.puts("[#{timestamp}] #{message}") }
-  end
-
-  def status_path
-    @status_path ||= File.join(config["tmp_dir"], "backup", "status.yml")
-  end
-
-  def write_status(name)
-    File.open(status_path, "w") { |f| f.puts(YAML.dump("status" => name.to_s, "time" => timestamp)) }
-    true
-  end
-
-  def timestamp
-    Time.now.utc.strftime("%Y-%m-%d %H:%M:%S UTC")
+  def module_name
+    "backup"
   end
 end

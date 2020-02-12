@@ -1,6 +1,7 @@
 require "sinatra"
 require "yaml"
 require "sys/filesystem"
+require_relative "models/module"
 require_relative "models/backup"
 require_relative "models/remote_access"
 
