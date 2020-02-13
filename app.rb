@@ -30,37 +30,37 @@ before do
   expires(0, :no_store, :no_cache, :must_revalidate)
 end
 
-get "/" do
+get "/panel" do
   @title = "Welcome"
   erb(:main)
 end
 
-get "/backup" do
+get "/panel/backup" do
   @config = load_config("backup")
   @title = "Backup"
   @backup = Backup.new(@config)
   erb(:backup)
 end
 
-post "/backup/run" do
+post "/panel/backup/run" do
   Process.fork do
     settings.running_server = nil # Don't terminate web server when process finishes.
     Backup.new(load_config("backup")).run
   end
 end
 
-post "/backup/reset" do
+post "/panel/backup/reset" do
   Backup.new(load_config("backup")).reset
 end
 
-get "/remote" do
+get "/panel/remote" do
   @config = load_config("remote")
   @title = "Remote Access"
   @remote = RemoteAccess.new(@config)
   erb(:remote)
 end
 
-post "/remote/start" do
+post "/panel/remote/start" do
   Process.fork do
     settings.running_server = nil # Don't terminate web server when process finishes.
     RemoteAccess.new(load_config("remote")).start
@@ -68,9 +68,9 @@ post "/remote/start" do
   sleep(1) # Allow enough time for 'starting' status to be written.
 end
 
-post "/remote/close" do
+post "/panel/remote/close" do
   RemoteAccess.new(load_config("remote")).close
-  redirect("/remote")
+  redirect("/panel/remote")
 end
 
 def load_config(key)

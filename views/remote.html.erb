@@ -5,7 +5,7 @@
   <% if !@remote.enabled? %>
     Remote access is disabled.
   <% elsif @remote.starting? %>
-    Remote access is starting up. <a href="/remote">Refresh</a> for updates.
+    Remote access is starting up. <a href="/panel/remote">Refresh</a> for updates.
   <% elsif @remote.failed? %>
     Starting remote access failed. See log below.
   <% elsif @remote.running? %>
@@ -19,7 +19,7 @@
   <% if @remote.enabled? && !@remote.starting? && !@remote.running? %>
     <tr>
       <td>
-        <a href="/remote/start" onclick="fetch('/remote/start', {method: 'POST'}).then(res => window.history.go(0)); return false;">Open</a>
+        <a href="/panel/remote/start" onclick="fetch('/panel/remote/start', {method: 'POST'}).then(res => window.history.go(0)); return false;">Open</a>
       </td>
       <td>
         Turn on remote access.
@@ -29,7 +29,7 @@
   <% if @remote.running? || @remote.starting? %>
     <tr>
       <td>
-        <a href="/remote/close" onclick="fetch('/remote/close', {method: 'POST'}).then(res => window.history.go(0)); return false;">Close</a>
+        <a href="/panel/remote/close" onclick="fetch('/panel/remote/close', {method: 'POST'}).then(res => window.history.go(0)); return false;">Close</a>
       </td>
       <td>
         Turn off remote access.
@@ -38,7 +38,7 @@
   <% end %>
   <tr>
     <td>
-      <a href="/remote">Refresh</a>
+      <a href="/panel/remote">Refresh</a>
     </td>
     <td>
       Update the information below.

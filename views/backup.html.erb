@@ -7,7 +7,7 @@
   <% elsif @backup.fresh? %>
     No backups have been run yet.
   <% elsif @backup.running? %>
-    Backup currently running. Started at <%= @backup.status["time"] %>. See log below. <a href="/backup">Refresh</a> for updates.
+    Backup currently running. Started at <%= @backup.status["time"] %>. See log below. <a href="/panel/backup">Refresh</a> for updates.
   <% else %>
     Last backup <%= @backup.status["status"] %> at <%= @backup.status["time"] %>. See log below.
   <% end %>
@@ -17,7 +17,7 @@
   <% if @backup.enabled? && !@backup.running? %>
     <tr>
       <td>
-        <a href="/backup/run" onclick="fetch('/backup/run', {method: 'POST'}).then(res => window.history.go(0)); return false;">Backup Now</a>
+        <a href="/panel/backup/run" onclick="fetch('/panel/backup/run', {method: 'POST'}).then(res => window.history.go(0)); return false;">Backup Now</a>
       </td>
       <td>
         Backup files and remove older backups per the retention policy below.
@@ -26,7 +26,7 @@
   <% end %>
   <tr>
     <td>
-      <a href="/backup">Refresh</a>
+      <a href="/panel/backup">Refresh</a>
     </td>
     <td>
       Update the information below.
@@ -35,7 +35,7 @@
   <% if @backup.running? %>
     <tr>
       <td>
-        <a href="/backup/reset" onclick="fetch('/backup/reset', {method: 'POST'}).then(res => window.history.go(0)); return false;">Reset</a>
+        <a href="/panel/backup/reset" onclick="fetch('/panel/backup/reset', {method: 'POST'}).then(res => window.history.go(0)); return false;">Reset</a>
       </td>
       <td>
         If the status has been "running" for a long time and the process seems frozen, you can try resetting it.
