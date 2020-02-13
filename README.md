@@ -3,6 +3,7 @@
 ## Dependencies
 
 * [Borg backup](https://borgbackup.readthedocs.io)
+* [ngrok](https://ngrok.io), properly configured
 
 ## Development
 
@@ -28,4 +29,4 @@ and visit http://localhost:4567/
 
 ## Production
 
-Similar to above, but setup Passenger or other app server to serve Rack app.
+Similar to above, but with 'real' partitions, setup Passenger or other app server to serve Rack app.
