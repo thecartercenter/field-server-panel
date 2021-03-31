@@ -6,14 +6,8 @@ class Backup < Module
 
   def initialize(config)
     self.config = config
-    self.free_space_gib = if `uname -a`.match(/Darwin/)
-                            # This gem doesn't work on Linux
-                            stat = Sys::Filesystem.stat(config["dest_path"])
-                            (stat.blocks_available.to_f * stat.block_size / 2**30).round(1)
-                          # This is kind of a hacky way to do it but good enough for now.
-                          elsif (stat = `df -m #{config["dest_path"]}`.split("\n")[1])
-                            (stat.split(" ")[3].to_f / 1024).round(1)
-                          end
+    stat = Sys::Filesystem.stat(config["dest_path"])
+    self.free_space_gib = (stat.blocks_available.to_f * stat.block_size / 2**30).round(1)
     self.enabled = true
   rescue Sys::Filesystem::Error => e
     self.enabled = false
