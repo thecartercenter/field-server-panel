@@ -60,10 +60,11 @@ get "/panel/remote" do
 end
 
 post "/panel/remote/start" do
-  Process.fork do
+  pid = Process.fork do
     settings.running_server = nil # Don't terminate web server when process finishes.
     RemoteAccess.new(load_config("remote")).start
   end
+  Process.detach(pid) # We don't care about return value of child process.
   sleep(1) # Allow enough time for 'starting' status to be written.
 end
 

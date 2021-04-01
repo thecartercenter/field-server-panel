@@ -10,16 +10,21 @@ class RemoteAccess < Module
     self.enabled = true
   end
 
+  # Daemonize the current process and start ngrok. #start will always be run by the web server
+  # in a forked process so daemonizing should not affect the server itself.
+  # The current process will block until ngrok is stopped.
+  # #close and #status will be called from the main webserver process.
+  # The status of the tunnel will be read from the log file and the ngrok local API.
   def start
     write_log("Starting", append: false)
     write_status(:starting)
     File.delete(kill_file_path) if File.exist?(kill_file_path)
     script_path = File.join(config["app_root"], "scripts", "runngrok")
-    spawn("sudo", script_path, (config["ssh_port"] || 22).to_s, log_path)
+    Process.daemon
+    `sudo #{script_path} #{config["ssh_port"] || 22} #{log_path}`
   rescue StandardError => e
     write_log(e)
     write_status(:failed)
-    raise e # Re-raise error so full backtrace gets logged to server log.
   end
 
   def close

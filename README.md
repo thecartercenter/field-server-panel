@@ -3,7 +3,7 @@
 ## Dependencies
 
 * [Borg backup](https://borgbackup.readthedocs.io)
-* [ngrok](https://ngrok.io), properly configured
+* [ngrok](https://ngrok.io), properly configured (use `sudo ngrok authtoken`, sudo is important)
 
 ## Development
 
@@ -25,7 +25,7 @@ Run
 
     ruby app.rb
 
-and visit http://localhost:4567/
+and visit http://localhost:4567/panel
 
 ## Production
 
