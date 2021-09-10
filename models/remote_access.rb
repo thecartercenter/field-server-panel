@@ -3,6 +3,8 @@ require "open-uri"
 
 # Sets up and maintains a remote access tunnel.
 class RemoteAccess < Module
+  DEFAULT_SUBDOMAIN = "getnemo"
+
   attr_accessor :config, :enabled, :mode
 
   def initialize(config, mode)
@@ -17,7 +19,7 @@ class RemoteAccess < Module
     write_status(:starting)
     File.delete(kill_file_path) if File.exist?(kill_file_path)
     script_path = File.join(config["app_root"], "scripts", "runngrok")
-    spawn("sudo", script_path, mode, port).to_s, log_path)
+    spawn("sudo", script_path, subdomain_arg, mode, port).to_s, log_path)
   rescue StandardError => e
     write_log(e)
     write_status(:failed)
@@ -59,6 +61,10 @@ class RemoteAccess < Module
 
   def port
     mode == "tcp" ? (config["ssh_port"] || 22) : 443
+  end
+
+  def subdomain_arg
+    "-subdomain=#{config['subdomain'] || DEFAULT_SUBDOMAIN}"
   end
 
   def module_name

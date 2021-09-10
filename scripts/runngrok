@@ -1,5 +1,5 @@
 #!/bin/bash
-ngrok $1 $2 -log=stdout >> $3 2>> $3 &
+ngrok $1 $2 $3 -log=stdout >> $4 2>> $4 &
 child=$!
 
 while [ ! -f tmp/remote/kill ]
