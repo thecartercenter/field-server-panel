@@ -55,7 +55,7 @@ end
 get "/panel/remote" do
   @config = load_config("remote")
   @title = "Remote Access"
-  @remote = RemoteAccess.new(@config)
+  @remote = RemoteAccess.new(@config, params["mode"])
   erb(:remote)
 end
 

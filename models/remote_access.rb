@@ -3,23 +3,24 @@ require "open-uri"
 
 # Sets up and maintains a remote access tunnel.
 class RemoteAccess < Module
-  attr_accessor :config, :enabled
+  attr_accessor :config, :enabled, :mode
 
-  def initialize(config)
+  def initialize(config, mode)
     self.config = config
     self.enabled = true
+    self.mode = mode
+    raise ArgumentError, "invalid mode" unless %w[tcp http].include?(mode)
   end
 
   def start
-    write_log("Starting", append: false)
+    write_log("Starting #{mode}", append: false)
     write_status(:starting)
     File.delete(kill_file_path) if File.exist?(kill_file_path)
     script_path = File.join(config["app_root"], "scripts", "runngrok")
-    spawn("sudo", script_path, (config["ssh_port"] || 22).to_s, log_path)
+    spawn("sudo", script_path, mode, port).to_s, log_path)
   rescue StandardError => e
     write_log(e)
     write_status(:failed)
-    raise e # Re-raise error so full backtrace gets logged to server log.
   end
 
   def close
@@ -55,6 +56,10 @@ class RemoteAccess < Module
   end
 
   protected
+
+  def port
+    mode == "tcp" ? (config["ssh_port"] || 22) : 443
+  end
 
   def module_name
     "remote"

@@ -19,10 +19,18 @@
   <% if @remote.enabled? && !@remote.starting? && !@remote.running? %>
     <tr>
       <td>
-        <a href="/panel/remote/start" onclick="fetch('/panel/remote/start', {method: 'POST'}).then(res => window.history.go(0)); return false;">Open</a>
+        <a href="/panel/remote/start" onclick="fetch('/panel/remote/start?mode=tcp', {method: 'POST'}).then(res => window.history.go(0)); return false;">Open SSH</a>
       </td>
       <td>
-        Turn on remote access.
+        Turn on remote SSH access.
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <a href="/panel/remote/start" onclick="fetch('/panel/remote/start?mode=https', {method: 'POST'}).then(res => window.history.go(0)); return false;">Open HTTPS</a>
+      </td>
+      <td>
+        Turn on remote HTTPS access.
       </td>
     </tr>
   <% end %>

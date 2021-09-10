@@ -1,5 +1,5 @@
 #!/bin/bash
-ngrok tcp $1 -log=stdout >> $2 2>> $2 &
+ngrok $1 $2 -log=stdout >> $3 2>> $3 &
 child=$!
 
 while [ ! -f tmp/remote/kill ]
