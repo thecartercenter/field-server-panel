@@ -10,16 +10,16 @@ class RemoteAccess < Module
     self.enabled = true
   end
 
-  def start
-    write_log("Starting", append: false)
+  def start(mode)
+    raise ArgumentError, "invalid mode" unless %w[ssh https].include?(mode)
+    write_log("Starting #{mode}", append: false)
     write_status(:starting)
     File.delete(kill_file_path) if File.exist?(kill_file_path)
     script_path = File.join(config["app_root"], "scripts", "runngrok")
-    spawn("sudo", script_path, (config["ssh_port"] || 22).to_s, log_path)
+    spawn("sudo", script_path, ngrok_mode(mode), port(mode), log_path)
   rescue StandardError => e
     write_log(e)
     write_status(:failed)
-    raise e # Re-raise error so full backtrace gets logged to server log.
   end
 
   def close
@@ -55,6 +55,14 @@ class RemoteAccess < Module
   end
 
   protected
+
+  def port(mode)
+    (mode == "ssh" ? (config["ssh_port"] || 22) : 443).to_s
+  end
+
+  def ngrok_mode(mode)
+    mode == "ssh" ? "tcp" : "http"
+  end
 
   def module_name
     "remote"

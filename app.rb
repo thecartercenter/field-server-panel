@@ -62,7 +62,7 @@ end
 post "/panel/remote/start" do
   Process.fork do
     settings.running_server = nil # Don't terminate web server when process finishes.
-    RemoteAccess.new(load_config("remote")).start
+    RemoteAccess.new(load_config("remote")).start(params["mode"])
   end
   sleep(1) # Allow enough time for 'starting' status to be written.
 end
