@@ -7,11 +7,11 @@
 
 ## Development
 
-Get a USB stick and format and mount it. Need not be big. This is your backup partition.
+Get a small USB stick; format and mount it. This is your backup partition.
 
 Make a source directory either in the project directory at `/source` (recommended for development, that folder is gitignored) or elsewhere. Put some random files in it.
 
-Grant passwordless sudo access for the ngrok wrapper script, e.g.
+Grant passwordless sudo access for the ngrok wrapper script, e.g.:
 
     deploy ALL=(ALL) NOPASSWD: /path/to/field-server-panel/scripts/runngrok
 
@@ -21,12 +21,17 @@ Setup config with:
 
 and edit to replace placeholders.
 
-Run
+Run:
 
     ruby app.rb
 
-and visit http://localhost:4567/
+and visit http://localhost:4567/ to verify it's working.
 
 ## Production
 
-Similar to above, but with 'real' partitions, setup Passenger or other app server to serve Rack app.
+Similar to above, but with 'real' partitions, set up Passenger or other app server to serve Rack app.
+
+### Upgrading
+
+1. `git pull`
+1. `bundle install`
