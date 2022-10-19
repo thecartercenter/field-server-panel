@@ -1,4 +1,4 @@
 source "http://rubygems.org"
 
-gem "sinatra", "~> 2.0"
+gem "sinatra", "~> 2.2"
 gem "sys-filesystem", "~> 1.3"
